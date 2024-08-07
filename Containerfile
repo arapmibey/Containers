@@ -13,7 +13,7 @@ RUN adduser amibey wheel
 RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Optional: Set a password for the new user
-RUN echo "amibey:yourpassword" | chpasswd
+RUN echo "amibey:abcd.123" | chpasswd
 
 # Set the user and work directory for subsequent commands
 USER amibey
