@@ -1,14 +1,21 @@
 FROM docker.io/library/alpine
 
 # Install necessary packages
-RUN apk add --no-cache shadow
+RUN apk add --no-cache sudo shadow
 
-# Add a new user with a specified password
-RUN useradd -m amibey && echo "amibey:abcd.123" | chpasswd
+# Add a new user without prompting for a password
+RUN adduser -D amibey
 
-# Optional: add the user to the sudo group and install sudo if needed
-RUN apk add --no-cache sudo && adduser amibey sudo
+# Add the user to the wheel group to allow sudo access
+RUN adduser amibey wheel
+
+# Configure sudoers to allow users in the wheel group to use sudo without a password
+RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+# Optional: Set a password for the new user
+RUN echo "amibey:yourpassword" | chpasswd
 
 # Set the user and work directory for subsequent commands
 USER amibey
 WORKDIR /home/amibey
+
